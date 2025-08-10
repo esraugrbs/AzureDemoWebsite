@@ -1,0 +1,5 @@
+:root{--azure:#0078d4}
+.bg-azure{background:var(--azure)}.text-azure{color:var(--azure)}.nav-link{color:#334155;margin-left:10px}
+a.nav-link:hover{color:var(--azure)}
+body{font-family:Inter,system-ui,Arial,sans-serif}
+.container{max-width:1100px;margin:0 auto;padding:20px}

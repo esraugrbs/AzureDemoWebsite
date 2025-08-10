@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Azure Cost & UX Demo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .floating { animation: float 6s ease-in-out infinite; }
+  .gradient-bg { 
+    background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  .hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  .glow {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+  }
+  .pulse-glow {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+</style>
+</head>
+<body class="bg-gray-900 text-white overflow-x-hidden">
+<!-- Animated background -->
+<div class="fixed inset-0 gradient-bg opacity-20 z-0"></div>
+<div class="fixed inset-0 bg-gray-900 opacity-80 z-0"></div>
+
+<header class="relative z-10 glass-card border-b border-white/10">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 hover-lift">
+      <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <span class="font-bold text-xl bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">AzureCost</span>
+    </a>
+    <nav class="space-x-6 text-sm">
+      <a href="features.html" class="nav-link hover:text-blue-400 transition-colors duration-200">Features</a>
+      <a href="quiz.html" class="nav-link hover:text-purple-400 transition-colors duration-200">Quiz</a>
+      <a href="admin.html" class="nav-link hover:text-pink-400 transition-colors duration-200">Admin</a>
+      <a href="contact.html" class="nav-link hover:text-green-400 transition-colors duration-200">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="relative z-10 max-w-6xl mx-auto px-6 py-16">
+  <section class="grid md:grid-cols-2 gap-12 items-center min-h-[60vh]">
+    <div class="space-y-8">
+      <div class="space-y-4">
+        <h1 class="text-6xl font-black leading-tight">
+          <span class="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            Azure Cost
+          </span>
+          <br/>
+          <span class="text-white">& UX Demo</span>
+        </h1>
+        <p class="text-xl text-gray-300 leading-relaxed max-w-lg">
+          A cutting-edge interactive platform featuring advanced cost simulation and gamified learning experiences for Azure cloud services.
+        </p>
+      </div>
+      
+      <div class="flex gap-6">
+        <a href="features.html" class="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold text-white shadow-2xl hover-lift glow pulse-glow">
+          <span class="relative z-10">Try the Simulator</span>
+          <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </a>
+        <a href="quiz.html" class="px-8 py-4 border-2 border-white/20 rounded-full font-semibold hover-lift glass-card backdrop-blur-sm hover:border-purple-400 transition-all duration-300">
+          Take the Quiz
+        </a>
+      </div>
+    </div>
+    
+    <div class="relative">
+      <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl"></div>
+      <div class="relative glass-card rounded-3xl p-8 hover-lift">
+        <div class="grid grid-cols-2 gap-6 mb-6">
+          <div class="text-center p-4 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/20 border border-blue-400/20">
+            <div class="text-3xl font-bold text-blue-400">99.9%</div>
+            <div class="text-sm text-gray-400">Accuracy</div>
+          </div>
+          <div class="text-center p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/20 border border-purple-400/20">
+            <div class="text-3xl font-bold text-purple-400">Real-time</div>
+            <div class="text-sm text-gray-400">Analysis</div>
+          </div>
+        </div>
+        <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full" style="width: 85%; animation: pulse 2s infinite;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-24 space-y-8">
+    <h2 class="text-3xl font-bold text-center mb-12">
+      <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Explore Features</span>
+    </h2>
+    
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="glass-card rounded-2xl p-8 hover-lift group">
+        <div class="mb-6">
+          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 floating">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">Cost Simulator</h3>
+          <p class="text-gray-400 leading-relaxed">Advanced cost modeling with real-time calculations and interactive visualizations.</p>
+        </div>
+        <div class="space-y-3">
+          <a href="features.html" class="block p-3 bg-blue-500/10 rounded-xl text-center hover:bg-blue-500/20 transition-colors border border-blue-500/20">
+            Cost Analysis
+          </a>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-8 hover-lift group">
+        <div class="mb-6">
+          <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-4 floating" style="animation-delay: -2s;">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-purple-400 transition-colors">Gamified Learning</h3>
+          <p class="text-gray-400 leading-relaxed">Interactive quizzes with achievement badges and progress tracking.</p>
+        </div>
+        <div class="space-y-3">
+          <a href="quiz.html" class="block p-3 bg-purple-500/10 rounded-xl text-center hover:bg-purple-500/20 transition-colors border border-purple-500/20">
+            Take Quiz
+          </a>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-8 hover-lift group">
+        <div class="mb-6">
+          <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mb-4 floating" style="animation-delay: -4s;">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-green-400 transition-colors">Live Previews</h3>
+          <p class="text-gray-400 leading-relaxed">Instant feedback and real-time data visualization across all tools.</p>
+        </div>
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <a href="features.html" class="block p-2 bg-green-500/10 rounded-lg text-center hover:bg-green-500/20 transition-colors border border-green-500/20">Simulator</a>
+            <a href="quiz.html" class="block p-2 bg-teal-500/10 rounded-lg text-center hover:bg-teal-500/20 transition-colors border border-teal-500/20">Quiz</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="relative z-10 border-t border-white/10 bg-black/20 mt-16">
+  <div class="max-w-6xl mx-auto p-6 text-center">
+    <p class="text-gray-400">Experience the future of cloud cost management</p>
+  </div>
+</footer>
+
+<script src="js/common.js"></script>
+</body>
+</html>

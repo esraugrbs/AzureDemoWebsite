@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gamified Quiz</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="css/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0"></script>
+<style>
+  @keyframes bounce-in {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .bounce-in { animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .answer-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  .answer-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+  .correct { 
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: white !important;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+  }
+  .incorrect { 
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    color: white !important;
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+  }
+  .progress-bar {
+    background: linear-gradient(270deg, #3b82f6, #8b5cf6, #ec4899);
+    background-size: 300% 300%;
+    animation: gradient-shift 3s ease infinite;
+  }
+</style>
+</head>
+<body class="bg-gradient-to-br from-purple-100 via-blue-50 to-indigo-100 min-h-screen">
+<header class="glass-card shadow-xl border-b border-purple-200/50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 hover:scale-105 transition-transform">
+      <div class="h-10 w-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center shadow-lg">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <span class="font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">AzureCost</span>
+    </a>
+    <nav class="space-x-6 text-sm font-medium">
+      <a href="index.html" class="text-gray-600 hover:text-purple-600 transition-colors">Home</a>
+      <a href="features.html" class="text-gray-600 hover:text-blue-600 transition-colors">Features</a>
+      <a href="quiz.html" class="text-purple-600 font-semibold">Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto p-6">
+  <!-- Progress Bar -->
+  <div class="mb-8">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium text-gray-600">Progress</span>
+      <span id="progressText" class="text-sm font-medium text-gray-600">Question 1 of 5</span>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full h-3 shadow-inner">
+      <div id="progressBar" class="progress-bar h-3 rounded-full transition-all duration-500 ease-out" style="width: 20%"></div>
+    </div>
+  </div>
+
+  <div class="glass-card rounded-3xl shadow-2xl p-8 mb-8 bounce-in">
+    <div class="text-center mb-8">
+      <h2 class="text-4xl font-bold mb-4">
+        <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          Azure Fundamentals Quiz
+        </span>
+      </h2>
+    </div>
+
+    <div id="quizArea">
+      <div class="mb-8">
+        <p id="question" class="text-2xl font-semibold text-gray-800 leading-relaxed text-center mb-8">Click "Start Quiz" to begin!</p>
+      </div>
+      
+      <div id="answers" class="grid gap-4 mb-8"></div>
+      
+      <div class="text-center">
+        <button id="nextBtn" class="hidden px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+          <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+          Next Question
+        </button>
+      </div>
+    </div>
+
+    <div id="result" class="hidden text-center">
+      <div class="mb-8">
+        <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-2xl">
+          <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+        </div>
+        
+        <h3 id="score" class="text-3xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Quiz Complete!</h3>
+        
+        <div id="badge" class="mb-6">
+          <div class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full text-white font-bold shadow-lg">
+            <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span id="badgeText">Achievement Unlocked!</span>
+          </div>
+        </div>
+        
+        <p class="text-gray-600 mb-8 text-lg">Keep practicing to master Azure fundamentals!</p>
+        
+        <button id="restart" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+          <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+          Take Quiz Again
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievement Gallery -->
+  <div class="glass-card rounded-2xl p-6 text-center">
+    <h3 class="text-lg font-bold text-gray-800 mb-4">Achievement Gallery</h3>
+    <div class="grid grid-cols-4 gap-4" id="achievementGallery">
+      <div class="p-4 bg-gray-100 rounded-xl opacity-50" id="bronze">
+        <div class="text-2xl mb-2">🥉</div>
+        <div class="text-xs text-gray-600">Bronze (1+)</div>
+      </div>
+      <div class="p-4 bg-gray-100 rounded-xl opacity-50" id="silver">
+        <div class="text-2xl mb-2">🥈</div>
+        <div class="text-xs text-gray-600">Silver (3+)</div>
+      </div>
+      <div class="p-4 bg-gray-100 rounded-xl opacity-50" id="gold">
+        <div class="text-2xl mb-2">🥇</div>
+        <div class="text-xs text-gray-600">Gold (4+)</div>
+      </div>
+      <div class="p-4 bg-gray-100 rounded-xl opacity-50" id="master">
+        <div class="text-2xl mb-2">🏆</div>
+        <div class="text-xs text-gray-600">Master (5)</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="glass-card border-t border-purple-200 mt-12">
+  <div class="max-w-6xl mx-auto p-6 text-center">
+    <p class="text-gray-600">Test your Azure knowledge and earn achievements</p>
+  </div>
+</footer>
+
+<script src="js/questions_az900.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/common.js"></script>
+<script>
+// Simple quiz functionality that works without external JS files
+let currentQuestion = 0;
+let score = 0;
+let questions = [
+  {
+    question: "What does IaaS stand for?",
+    options: ["Infrastructure as a Service", "Internet as a Service", "Integration as a Service", "Information as a Service"],
+    correct: 0
+  },
+  {
+    question: "Which Azure service is used for hosting web applications?",
+    options: ["Azure Functions", "Azure App Service", "Azure Logic Apps", "Azure Service Bus"],
+    correct: 1
+  },
+  {
+    question: "What is the maximum number of storage accounts per subscription?",
+    options: ["100", "200", "250", "500"],
+    correct: 2
+  },
+  {
+    question: "Which Azure service provides serverless computing?",
+    options: ["Azure Virtual Machines", "Azure Functions", "Azure SQL Database", "Azure Storage"],
+    correct: 1
+  },
+  {
+    question: "What is Azure Active Directory used for?",
+    options: ["Data storage", "Identity and access management", "Virtual networking", "Load balancing"],
+    correct: 1
+  }
+];
+
+let correctCount = 0;
+let wrongCount = 0;
+
+function startQuiz() {
+  document.getElementById('startBtn').style.display = 'none';
+  currentQuestion = 0;
+  score = 0;
+  correctCount = 0;
+  wrongCount = 0;
+  updateCounters();
+  showQuestion();
+}
+
+function showQuestion() {
+  if (currentQuestion < questions.length) {
+    const q = questions[currentQuestion];
+    document.getElementById('question').textContent = q.question;
+    
+    const answersDiv = document.getElementById('answers');
+    answersDiv.innerHTML = '';
+    
+    q.options.forEach((option, index) => {
+      const button = document.createElement('button');
+      button.className = 'answer-card p-4 text-left rounded-xl border-2 border-gray-200 hover:border-purple-400 bg-white/70 backdrop-blur-sm font-medium transition-all duration-300';
+      button.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span>${option}</span>
+          <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center">
+            <div class="w-3 h-3 rounded-full bg-gray-300 opacity-0 transition-opacity duration-200"></div>
+          </div>
+        </div>
+      `;
+      
+      button.onclick = () => selectAnswer(index);
+      answersDiv.appendChild(button);
+    });
+    
+    updateProgress();
+  } else {
+    showResult();
+  }
+}
+
+function selectAnswer(selected) {
+  const buttons = document.querySelectorAll('.answer-card');
+  const correct = questions[currentQuestion].correct;
+  
+  buttons.forEach((btn, index) => {
+    btn.onclick = null; // Disable clicking
+    if (index === correct) {
+      btn.classList.add('correct');
+    } else if (index === selected) {
+      btn.classList.add('incorrect');
+    }
+  });
+  
+  if (selected === correct) {
+    score++;
+    correctCount++;
+  } else {
+    wrongCount++;
+  }
+  
+  updateCounters();
+  document.getElementById('nextBtn').style.display = 'block';
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  document.getElementById('nextBtn').style.display = 'none';
+  showQuestion();
+}
+
+function updateProgress() {
+  const progress = ((currentQuestion + 1) / questions.length) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+  document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+}
+
+function updateCounters() {
+  document.getElementById('correctCount').textContent = correctCount;
+  document.getElementById('wrongCount').textContent = wrongCount;
+}
+
+function showResult() {
+  document.getElementById('quizArea').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+  
+  const percentage = Math.round((score / questions.length) * 100);
+  document.getElementById('score').textContent = `You scored ${score} out of ${questions.length} (${percentage}%)`;
+  
+  // Update badges
+  if (score >= 1) {
+    document.getElementById('bronze').style.opacity = '1';
+    document.getElementById('bronze').style.background = 'linear-gradient(135deg, #cd7f32, #b87333)';
+  }
+  if (score >= 3) {
+    document.getElementById('silver').style.opacity = '1';
+    document.getElementById('silver').style.background = 'linear-gradient(135deg, #c0c0c0, #a8a8a8)';
+  }
+  if (score >= 4) {
+    document.getElementById('gold').style.opacity = '1';
+    document.getElementById('gold').style.background = 'linear-gradient(135deg, #ffd700, #ffed4e)';
+  }
+  if (score === 5) {
+    document.getElementById('master').style.opacity = '1';
+    document.getElementById('master').style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a24)';
+  }
+  
+  // Badge text based on score
+  let badgeText = "Try Again!";
+  if (score >= 4) badgeText = "Azure Expert!";
+  else if (score >= 3) badgeText = "Well Done!";
+  else if (score >= 1) badgeText = "Good Start!";
+  
+  document.getElementById('badgeText').textContent = badgeText;
+  
+  // Confetti for good scores
+  if (score >= 3) {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
+}
+
+function restartQuiz() {
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('quizArea').classList.remove('hidden');
+  document.getElementById('startBtn').style.display = 'block';
+  document.getElementById('question').textContent = 'Click "Start Quiz" to begin!';
+  document.getElementById('answers').innerHTML = '';
+}
+
+// Event listeners
+document.getElementById('startBtn').onclick = startQuiz;
+document.getElementById('nextBtn').onclick = nextQuestion;
+document.getElementById('restart').onclick = restartQuiz;
+</script>
+</body>
+</html>

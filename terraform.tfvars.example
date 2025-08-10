@@ -1,0 +1,6 @@
+resource_group_name = "sdx-rg"
+location            = "polandcentral"
+vnet_cidr           = "10.0.0.0/16"
+admin_username      = "yourusername"
+private_key_path    = "path"
+ssh_public_key      = "your public key name@name"

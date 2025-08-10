@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>Admin Portal</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.6); }
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .floating { animation: float 3s ease-in-out infinite; }
+  .input-focus:focus {
+    outline: none;
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+</style>
+</head>
+<body class="bg-gradient-to-br from-red-50 via-orange-50 to-pink-50 min-h-screen">
+<header class="glass-card shadow-xl border-b border-red-200/50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 hover:scale-105 transition-transform">
+      <div class="h-10 w-10 rounded-full bg-gradient-to-r from-red-500 to-pink-600 flex items-center justify-center shadow-lg">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6l-1-1v-1L2 12v-1l-1-1v-1l1-1 .757-.757a6 6 0 0111.83-3.475c.047.149.193.25.348.25h.065c.138 0 .25-.112.25-.25 0-.138-.112-.25-.25-.25h-.065a.247.247 0 00-.144.047A6.004 6.004 0 0018 8zm-9.5-.5a.5.5 0 000 1 .5.5 0 100-1z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span class="font-bold text-xl bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">AzureCost</span>
+    </a>
+    <nav class="space-x-6 text-sm font-medium">
+      <a href="index.html" class="text-gray-600 hover:text-red-600 transition-colors">Home</a>
+      <a href="admin.html" class="text-red-600 font-semibold">Admin</a>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-md mx-auto p-6 pt-16">
+  <div class="glass-card rounded-3xl shadow-2xl p-8 text-center">
+    <!-- Lock Icon -->
+    <div class="mb-8">
+      <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center shadow-xl floating">
+        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+        </svg>
+      </div>
+    </div>
+
+    <h2 class="text-3xl font-bold mb-2">
+      <span class="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+        Admin Portal
+      </span>
+    </h2>
+    <p class="text-gray-600 mb-8">Secure access to administrative controls</p>
+
+    <form id="adminForm" class="space-y-6">
+      <div class="text-left">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          <svg class="inline w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+          </svg>
+          Username
+        </label>
+        <input id="username" type="text" 
+               class="w-full p-4 rounded-xl border-2 border-gray-200 input-focus transition-all duration-300 bg-white/80 font-medium"
+               placeholder="Enter your username">
+      </div>
+
+      <div class="text-left">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          <svg class="inline w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+          </svg>
+          Password
+        </label>
+        <input id="password" type="password" 
+               class="w-full p-4 rounded-xl border-2 border-gray-200 input-focus transition-all duration-300 bg-white/80 font-medium"
+               placeholder="Enter your password">
+      </div>
+
+      <button type="submit" 
+              class="w-full py-4 bg-gradient-to-r from-red-600 to-pink-600 text-white text-lg font-bold rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 focus:ring-4 focus:ring-red-300">
+        <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+        </svg>
+        Sign In Securely
+      </button>
+    </form>
+
+    <!-- Demo Notice -->
+    <div class="mt-8 p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-200">
+      <div class="flex items-center justify-center mb-2">
+        <svg class="w-5 h-5 text-amber-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="font-semibold text-amber-800">Demo Environment</span>
+      </div>
+      <p class="text-sm text-amber-700">
+        This is a frontend demonstration only. No actual authentication is performed.
+      </p>
+    </div>
+
+    <!-- Features Preview -->
+    <div class="mt-8 grid grid-cols-2 gap-4 text-xs">
+      <div class="p-3 bg-gray-50 rounded-lg border border-gray-200 opacity-50">
+        <div class="font-semibold text-gray-400 mb-1">User Management</div>
+        <div class="text-gray-400">Coming Soon</div>
+      </div>
+      <div class="p-3 bg-gray-50 rounded-lg border border-gray-200 opacity-50">
+        <div class="font-semibold text-gray-400 mb-1">Analytics</div>
+        <div class="text-gray-400">Coming Soon</div>
+      </div>
+    

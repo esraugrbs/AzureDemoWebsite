@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Features — Cost Simulator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+  }
+  @keyframes slide-in {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .input-glow:focus {
+    animation: pulse-glow 2s infinite;
+    outline: none;
+  }
+  .slide-in {
+    animation: slide-in 0.5s ease-out;
+  }
+  .hover-scale {
+    transition: transform 0.2s ease;
+  }
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
+<header class="glass-card shadow-lg border-b border-blue-200/50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 hover:scale-105 transition-transform">
+      <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <span class="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">AzureCost</span>
+    </a>
+    <nav class="space-x-6 text-sm font-medium">
+      <a href="index.html" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
+      <a href="features.html" class="text-blue-600 font-semibold">Features</a>
+      <a href="quiz.html" class="text-gray-600 hover:text-purple-600 transition-colors">Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto p-6">
+  <div class="text-center mb-8">
+    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      Azure Cost Efficiency Simulator
+    </h2>
+    <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+      Optimize your Azure infrastructure costs with real-time calculations and intelligent recommendations
+    </p>
+  </div>
+
+  <div class="glass-card rounded-3xl shadow-2xl p-8 mb-8">
+    <div class="grid lg:grid-cols-2 gap-12">
+      <!-- Controls Section -->
+      <div class="space-y-8">
+        <div class="space-y-6">
+          <div class="group">
+            <label class="block text-lg font-semibold text-gray-700 mb-3">
+              <svg class="inline w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              Virtual Machine Type
+            </label>
+            <select id="vmType" class="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-blue-500 input-glow transition-all duration-300 bg-white/80 hover-scale font-medium">
+              <option value="B1s">B1s (Budget-friendly) - $7.30/month</option>
+              <option value="D2s_v3">D2s_v3 (Balanced Performance) - $70.08/month</option>
+              <option value="E4s_v3">E4s_v3 (High Performance) - $175.20/month</option>
+            </select>
+          </div>
+
+          <div class="group">
+            <label class="block text-lg font-semibold text-gray-700 mb-3">
+              <svg class="inline w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+              </svg>
+              Monthly Data Transfer
+            </label>
+            <input id="traffic" type="range" min="100" max="10000" step="100" value="1000" 
+                   class="w-full h-3 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg appearance-none cursor-pointer slider" />
+            <div class="flex justify-between items-center mt-2">
+              <span class="text-sm text-gray-500">100 GB</span>
+              <div class="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full text-white font-bold">
+                <span id="trafficVal">1000</span> GB
+              </div>
+              <span class="text-sm text-gray-500">10,000 GB</span>
+            </div>
+          </div>
+
+          <div class="group">
+            <label class="block text-lg font-semibold text-gray-700 mb-3">
+              <svg class="inline w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+              </svg>
+              Storage Configuration
+            </label>
+            <select id="storage" class="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-purple-500 input-glow transition-all duration-300 bg-white/80 hover-scale font-medium">
+              <option value="Standard_HDD">Standard HDD - Cost Optimized</option>
+              <option value="Standard_SSD">Standard SSD - Balanced Performance</option>
+              <option value="Premium_SSD">Premium SSD - Maximum Performance</option>
+            </select>
+          </div>
+
+          <button id="calcBtn" class="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-bold rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 focus:ring-4 focus:ring-blue-300">
+            <svg class="inline w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+            Calculate Costs
+          </button>
+        </div>
+      </div>
+
+      <!-- Visualization Section -->
+      <div class="space-y-6">
+        <div class="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border-2 border-gray-100 shadow-inner">
+          <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Cost Analysis Chart</h3>
+          <canvas id="costChart" width="400" height="280" class="w-full rounded-lg"></canvas>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl border-2 border-blue-100">
+          <div class="flex items-center mb-4">
+            <svg class="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+            <h4 class="text-lg font-bold text-gray-800">Smart Recommendations</h4>
+          </div>
+          <ul id="recomms" class="space-y-3 text-gray-700">
+            <li class="flex items-start">
+              <span class="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
+              <span>Select your configuration to see personalized cost optimization suggestions</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Info Section -->
+  <div class="grid md:grid-cols-3 gap-6 mb-8">
+    <div class="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-transform shadow-lg">
+      <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-gray-800 mb-2">Real-time Analytics</h3>
+      <p class="text-gray-600 text-sm">Instant cost calculations with dynamic visualizations</p>
+    </div>
+
+    <div class="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-transform shadow-lg">
+      <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-gray-800 mb-2">Smart Optimization</h3>
+      <p class="text-gray-600 text-sm">AI-powered recommendations for cost efficiency</p>
+    </div>
+
+    <div class="glass-card p-6 rounded-2xl text-center hover:scale-105 transition-transform shadow-lg">
+      <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-gray-800 mb-2">Interactive Modeling</h3>
+      <p class="text-gray-600 text-sm">Experiment with different configurations seamlessly</p>
+    </div>
+  </div>
+</main>
+
+<footer class="glass-card border-t border-gray-200 mt-12">
+  <div class="max-w-6xl mx-auto p-6 text-center">
+    <p class="text-gray-600">Optimize your Azure costs with precision and confidence</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/cost.js"></script>
+<script src="js/common.js"></script>
+<script>
+// Enhanced traffic slider update
+document.getElementById('traffic').addEventListener('input', function(e) {
+  document.getElementById('trafficVal').textContent = e.target.value;
+  document.getElementById('trafficVal').parentElement.classList.add('slide-in');
+  setTimeout(() => {
+    document.getElementById('trafficVal').parentElement.classList.remove('slide-in');
+  }, 500);
+});
+</script>
+</body>
+</html>
